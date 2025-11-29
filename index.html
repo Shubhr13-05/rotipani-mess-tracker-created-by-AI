@@ -179,6 +179,59 @@
         </div>
     </div>
 
+    <!-- Edit Past Meal Modal -->
+    <div class="modal" id="editMealModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Meals</h2>
+                <button class="close-button" onclick="closeEditMeal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="edit-date-display" id="editDateDisplay"></div>
+                
+                <div class="edit-meal-section">
+                    <div class="edit-meal-card" id="editLunchCard">
+                        <div class="meal-header">
+                            <div class="meal-info">
+                                <div class="meal-icon">🌅</div>
+                                <div>
+                                    <h3 class="meal-title">Lunch</h3>
+                                    <p class="meal-time">12:00 PM - 2:00 PM</p>
+                                </div>
+                            </div>
+                            <button class="check-button" id="editLunchButton" onclick="toggleEditMeal('lunch')">
+                                <svg class="check-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="meal-status" id="editLunchStatus">Not consumed</div>
+                    </div>
+
+                    <div class="edit-meal-card" id="editDinnerCard">
+                        <div class="meal-header">
+                            <div class="meal-info">
+                                <div class="meal-icon">🌙</div>
+                                <div>
+                                    <h3 class="meal-title">Dinner</h3>
+                                    <p class="meal-time">7:00 PM - 9:00 PM</p>
+                                </div>
+                            </div>
+                            <button class="check-button" id="editDinnerButton" onclick="toggleEditMeal('dinner')">
+                                <svg class="check-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="meal-status" id="editDinnerStatus">Not consumed</div>
+                    </div>
+                </div>
+
+                <button class="start-button" onclick="saveEditedMeal()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Data Table Modal -->
     <div class="modal" id="dataTableModal" style="display: none;">
         <div class="modal-content table-modal">
