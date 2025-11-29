@@ -187,6 +187,37 @@ body {
     background: #dc2626;
 }
 
+/* Edit Meal Modal Styles */
+.edit-date-display {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary);
+    padding: 15px;
+    background: var(--bg-primary);
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.edit-meal-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.edit-meal-card {
+    background: var(--bg-primary);
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+}
+
+.edit-meal-card.consumed {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%);
+    border-color: var(--success);
+}
+
 /* Table Styles */
 .table-container {
     overflow-x: auto;
@@ -483,6 +514,10 @@ body {
     background: rgba(16, 185, 129, 0.1);
 }
 
+.edit-meal-card.consumed .meal-status {
+    color: var(--success);
+}
+
 /* Tabs */
 .tabs-container {
     display: flex;
@@ -615,6 +650,7 @@ body {
 .day-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+    border-color: var(--primary);
 }
 
 .day-name {
@@ -709,6 +745,11 @@ body {
 @keyframes celebrate {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 
 @media (max-width: 768px) {
