@@ -1,5 +1,6 @@
 // Global variables
 let currentMonthOffset = 0;
+let editingDateKey = null;
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', function() {
@@ -225,6 +226,8 @@ function renderWeeklyCalendar() {
         
         const dayCard = document.createElement('div');
         dayCard.className = 'day-card';
+        dayCard.style.cursor = 'pointer';
+        dayCard.onclick = () => openEditMeal(dateKey);
         
         dayCard.innerHTML = `
             <div class="day-name">${dayNames[date.getDay()]}</div>
@@ -287,6 +290,8 @@ function renderMonthlyCalendar() {
         
         const dayCard = document.createElement('div');
         dayCard.className = 'day-card';
+        dayCard.style.cursor = 'pointer';
+        dayCard.onclick = () => openEditMeal(dateKey);
         
         // Highlight today
         if (dateKey === getTodayKey()) {
@@ -305,6 +310,101 @@ function renderMonthlyCalendar() {
         
         calendar.appendChild(dayCard);
     });
+}
+
+// Open edit meal modal
+function openEditMeal(dateKey) {
+    editingDateKey = dateKey;
+    const [year, month, day] = dateKey.split('-');
+    const date = new Date(year, month - 1, day);
+    const meals = JSON.parse(localStorage.getItem(dateKey)) || { lunch: false, dinner: false };
+    
+    // Format date display
+    const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+    document.getElementById('editDateDisplay').textContent = date.toLocaleDateString('en-US', options);
+    
+    // Update meal UI in modal
+    updateEditMealUI('lunch', meals.lunch);
+    updateEditMealUI('dinner', meals.dinner);
+    
+    document.getElementById('editMealModal').style.display = 'flex';
+}
+
+// Close edit meal modal
+function closeEditMeal() {
+    document.getElementById('editMealModal').style.display = 'none';
+    editingDateKey = null;
+}
+
+// Toggle meal in edit modal
+function toggleEditMeal(mealType) {
+    const meals = JSON.parse(localStorage.getItem(editingDateKey)) || { lunch: false, dinner: false };
+    meals[mealType] = !meals[mealType];
+    
+    if (meals[mealType]) {
+        meals[`${mealType}Time`] = new Date().toISOString();
+    } else {
+        delete meals[`${mealType}Time`];
+    }
+    
+    updateEditMealUI(mealType, meals[mealType]);
+}
+
+// Update edit meal UI
+function updateEditMealUI(mealType, isConsumed) {
+    const card = document.getElementById(`edit${mealType.charAt(0).toUpperCase() + mealType.slice(1)}Card`);
+    const button = document.getElementById(`edit${mealType.charAt(0).toUpperCase() + mealType.slice(1)}Button`);
+    const status = document.getElementById(`edit${mealType.charAt(0).toUpperCase() + mealType.slice(1)}Status`);
+    
+    if (isConsumed) {
+        card.classList.add('consumed');
+        button.classList.add('checked');
+        status.textContent = '✓ Consumed';
+    } else {
+        card.classList.remove('consumed');
+        button.classList.remove('checked');
+        status.textContent = 'Not consumed';
+    }
+}
+
+// Save edited meal
+function saveEditedMeal() {
+    const lunchCard = document.getElementById('editLunchCard');
+    const dinnerCard = document.getElementById('editDinnerCard');
+    
+    const meals = {
+        lunch: lunchCard.classList.contains('consumed'),
+        dinner: dinnerCard.classList.contains('consumed')
+    };
+    
+    if (meals.lunch) {
+        const existing = JSON.parse(localStorage.getItem(editingDateKey)) || {};
+        meals.lunchTime = existing.lunchTime || new Date().toISOString();
+    }
+    
+    if (meals.dinner) {
+        const existing = JSON.parse(localStorage.getItem(editingDateKey)) || {};
+        meals.dinnerTime = existing.dinnerTime || new Date().toISOString();
+    }
+    
+    localStorage.setItem(editingDateKey, JSON.stringify(meals));
+    
+    // Refresh UI
+    if (editingDateKey === getTodayKey()) {
+        loadTodayMeals();
+    }
+    updateStats();
+    renderWeeklyCalendar();
+    renderMonthlyCalendar();
+    
+    closeEditMeal();
+    
+    // Show success message
+    const tempMsg = document.createElement('div');
+    tempMsg.textContent = '✓ Meal updated successfully!';
+    tempMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: var(--success); color: white; padding: 15px 25px; border-radius: 10px; z-index: 10000; animation: slideIn 0.3s ease;';
+    document.body.appendChild(tempMsg);
+    setTimeout(() => tempMsg.remove(), 2000);
 }
 
 // Switch between tabs
