@@ -156,7 +156,10 @@
         </div>
 
         <div class="action-buttons">
-            <button class="action-button export-button" onclick="exportData()">📥 Export Data</button>
+            <button class="action-button view-button" onclick="viewDataTable()">📊 View Data Table</button>
+            <button class="action-button export-button" onclick="exportData()">📥 Export JSON</button>
+            <button class="action-button import-button" onclick="document.getElementById('importFile').click()">📤 Import Data</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
             <button class="action-button clear-button" onclick="clearHistory()">🗑️ Clear History</button>
         </div>
     </div>
@@ -172,6 +175,23 @@
                 <label for="editUserName" class="input-label">Your Name</label>
                 <input type="text" id="editUserName" class="name-input" placeholder="Enter your name">
                 <button class="start-button" onclick="updateName()">Update Name</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table Modal -->
+    <div class="modal" id="dataTableModal" style="display: none;">
+        <div class="modal-content table-modal">
+            <div class="modal-header">
+                <h2>Your Meal History</h2>
+                <button class="close-button" onclick="closeDataTable()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="table-actions">
+                    <button class="action-button export-button" onclick="exportTableAsCSV()">📥 Download CSV</button>
+                    <button class="action-button export-button" onclick="copyTableData()">📋 Copy Data</button>
+                </div>
+                <div class="table-container" id="dataTableContainer"></div>
             </div>
         </div>
     </div>
